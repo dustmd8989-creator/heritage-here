@@ -126,7 +126,7 @@ if (!h) {
     </section>
     <div class="content">
     <ul class="summary">${h.summary.map(s => `<li>${esc(s)}</li>`).join('')}</ul>
-    ${h.sections.map((s, i) => `<details ${i===0?'open':''}><summary>${esc(s.title)}</summary><div>${esc(s.body).replace(/\n/g,'<br>')}</div></details>`).join('')}
+    ${h.sections.map((s, i) => `<details><summary>${esc(s.title)}</summary><div>${esc(s.body).replace(/\n/g,'<br>')}</div></details>`).join('')}
     <details><summary>사진 모아보기</summary><div class="gallery">
       ${h.photos.map((p, i) => `<figure data-i="${i}">${svgPhoto(p, false)}<figcaption>${esc(p.cap)}${p.credit ? '<br>' + esc(p.credit) : ''}</figcaption></figure>`).join('')}
     </div></details>
