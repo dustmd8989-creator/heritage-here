@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Heritage Here | 시범</title>
+<link rel="icon" href="brand/favicon.svg" type="image/svg+xml">
+<style>
+  @font-face { font-family:"KoPub"; font-weight:700; font-display:swap; src:url("fonts/kopub-bold.woff2") format("woff2"); }
+  @font-face { font-family:"KoPub"; font-weight:500; font-display:swap; src:url("fonts/kopub-medium.woff2") format("woff2"); }
+  @font-face { font-family:"KoPub"; font-weight:300; font-display:swap; src:url("fonts/kopub-light.woff2") format("woff2"); }
+  /* 색상: 흰색 · 회색 · 네이비 */
+  :root { --white:#ffffff; --gray-100:#f2f4f7; --gray-300:#d3d8e0; --gray-600:#59616f; --navy:#14264b; --fs:18px; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--white); color:var(--navy); font-family:"KoPub","Malgun Gothic","Apple SD Gothic Neo",sans-serif; font-weight:500; font-size:var(--fs); line-height:1.75; }
+  /* 글꼴 위계: 제목·강조 = Bold / 본문 = Medium / 보조 정보 = Light */
+  h1, summary, .btn, .badge { font-weight:700; }
+  .meta, figcaption, .notice, header.top > span:first-child { font-weight:300; color:var(--gray-600); }
+  header.top { position:absolute; top:0; left:0; right:0; z-index:5; display:flex; justify-content:space-between; align-items:center; padding:10px 16px; font-size:.8em; }
+  header.top > span:first-child { color:var(--white); }
+  .brand-logo { height:34px; width:auto; display:block; }
+  .fs button { font:inherit; font-weight:500; border:1px solid rgba(255,255,255,.7); background:rgba(20,38,75,.55); color:var(--white); border-radius:8px; padding:4px 12px; min-height:36px; }
+  main { max-width:640px; margin:0 auto; }
+  .content { padding:8px 16px 48px; }
+  /* 전체화면 표지: 대표사진 배경 + 네이비 그라데이션 */
+  .cover { position:relative; min-height:100vh; min-height:100svh; display:flex; flex-direction:column; justify-content:flex-end; padding:72px 20px 20px; color:var(--white); background-size:cover; background-position:var(--focus,50% 50%); background-color:var(--navy); }
+  .cover::before { content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(20,38,75,.35) 0%, rgba(20,38,75,.05) 30%, rgba(20,38,75,.6) 62%, rgba(20,38,75,.95) 100%); }
+  .cover > * { position:relative; }
+  .badge { align-self:flex-start; display:inline-block; padding:2px 12px; border-radius:999px; background:var(--white); color:var(--navy); font-size:.75em; }
+  h1 { margin:10px 0 2px; font-size:2.2em; line-height:1.2; }
+  .cover .meta { color:#e3e8f1; margin:0; font-size:.9em; }
+  .cover .hanja { margin:0 0 6px; }
+  .cover .actions { margin:18px 0 10px; }
+  .cover .btn { background:var(--white); color:var(--navy); border-color:var(--white); }
+  .cover .btn.alt { background:rgba(20,38,75,.4); color:var(--white); border-color:var(--white); }
+  .cover .photo-credit { font-size:.7em; font-weight:300; color:#cfd6e4; text-align:right; margin:0; }
+  .cover .scrollhint { text-align:center; font-weight:300; font-size:.8em; color:#e3e8f1; margin:8px 0 0; }
+  .meta { font-size:.85em; margin:0 0 12px; }
+  .summary { background:var(--gray-100); border-radius:12px; padding:6px 16px 6px 36px; margin:20px 0 12px; }
+  .summary li { margin:10px 0; }
+  .summary li::marker { color:var(--navy); }
+  .actions { display:flex; gap:8px; }
+  .btn { flex:1; text-align:center; padding:12px 8px; min-height:48px; border-radius:12px; border:1.5px solid var(--navy); background:var(--navy); color:var(--white); font-family:inherit; font-size:.9em; text-decoration:none; cursor:pointer; }
+  .btn.alt { background:var(--white); color:var(--navy); }
+  details { background:var(--white); border:1px solid var(--gray-300); border-radius:12px; margin:12px 0; padding:0 16px; }
+  summary { padding:14px 0; cursor:pointer; min-height:48px; }
+  details > div { padding-bottom:12px; }
+  .gallery { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding-bottom:12px; }
+  .gallery figure { margin:0; cursor:pointer; }
+  .gallery svg { width:100%; height:auto; border-radius:8px; display:block; }
+  .gallery img { aspect-ratio:4/3; object-fit:cover; border-radius:8px; }
+  figcaption { font-size:.8em; margin-top:4px; line-height:1.5; }
+  #lightbox { position:fixed; inset:0; background:rgba(20,38,75,.96); display:none; align-items:center; justify-content:center; flex-direction:column; padding:16px; z-index:10; color:var(--white); text-align:center; }
+  #lightbox.on { display:flex; }
+  #lightbox svg { max-width:100%; max-height:70vh; }
+  #lbBody img { max-width:100%; max-height:70vh; width:auto !important; }
+  .notice { margin-top:28px; font-size:.8em; border-top:1px solid var(--gray-300); padding-top:12px; line-height:1.6; }
+  .err { padding:40px 0; text-align:center; }
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="brand-logo" src="brand/logo-heritage-here-white.svg" alt="Heritage Here (헤리티지 히어)">
+  <span class="fs"><button id="fsDown" aria-label="글자 작게">가−</button> <button id="fsUp" aria-label="글자 크게">가＋</button></span>
+</header>
+<main id="app"></main>
+<div id="lightbox" role="dialog" aria-label="사진 확대"><div id="lbBody"></div><p id="lbCap"></p><button class="btn alt" style="flex:none;background:transparent;color:#fff;border-color:#fff;padding:8px 28px">닫기</button></div>
+
+<script>
+</script>
+<script src="data.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let gid = 0;
+const svgPhoto = (p) => { if (p.src) return `<img src="${esc(p.src)}" alt="${esc(p.cap)}" style="width:100%;height:auto;display:block;border-radius:8px">`; const g = 'grad' + (gid++); return `<svg viewBox="0 0 400 300" role="img" aria-label="${esc(p.cap)}"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${p.c1}"/><stop offset="1" stop-color="${p.c2}"/></linearGradient></defs><rect width="400" height="300" fill="url(#${g})"/><text x="200" y="158" text-anchor="middle" font-size="22" fill="#fff" opacity=".85">사진 자리</text></svg>`; };
+
+// 글자 크기 (저장소 사용 불가 환경 대비)
+let fs = 18;
+try { fs = parseInt(localStorage.getItem('fs')) || 18; } catch(e) {}
+function applyFs(){ document.documentElement.style.setProperty('--fs', fs + 'px'); try{localStorage.setItem('fs', fs);}catch(e){} }
+$('#fsUp').onclick = () => { fs = Math.min(26, fs + 2); applyFs(); if (typeof track === 'function') track('font_size', { size: fs }); };
+$('#fsDown').onclick = () => { fs = Math.max(14, fs - 2); applyFs(); if (typeof track === 'function') track('font_size', { size: fs }); };
+applyFs();
+
+// QR 주소의 ?id= 값으로 문화유산 선택
+const id = new URLSearchParams(location.search).get('id') || '00001';
+const h = HERITAGE[id];
+
+// ---- 접속 통계 연결부 -------------------------------------------------
+// 어떤 통계 도구를 쓸지 정해지기 전까지는 아무것도 전송하지 않습니다.
+// - QR 주소에는 &src=qr 을 붙여 QR 스캔 방문과 직접 방문을 구분합니다.
+// - 이 페이지의 사건(열람, 음성, 길찾기 등)은 'heritage:track' 이벤트로 발행됩니다.
+//   통계 도구가 정해지면 아래 리스너 한 곳만 해당 도구 호출로 바꾸면 됩니다.
+// - 주소 뒤에 &debug=1 을 붙이면 발행되는 이벤트를 콘솔에서 볼 수 있습니다.
+const qs = new URLSearchParams(location.search);
+const entry = qs.get('src') || 'direct';
+const debugTrack = qs.get('debug') === '1';
+function track(name, extra) {
+  const detail = Object.assign({ name, id, src: entry }, extra || {});
+  try { window.dispatchEvent(new CustomEvent('heritage:track', { detail })); } catch (e) {}
+  if (debugTrack) console.log('[track]', detail);
+}
+// window.addEventListener('heritage:track', e => { /* 예: goatcounter.count({ path: 'event/' + e.detail.name + '/' + e.detail.id, event: true }) */ });
+const app = $('#app');
+
+if (!h) {
+  app.innerHTML = `<div class="err"><h1>안내 페이지를 찾을 수 없습니다</h1><p>안내판의 QR을 다시 스캔하거나 관리 기관에 문의해 주세요.</p></div>`;
+} else {
+  document.title = h.name + ' | Heritage Here';
+  const speakText = h.name + '. ' + h.summary.join(' ') + ' ' + h.sections.map(s => s.body).join(' ');
+  const cover = h.photos[0];
+  const coverBg = cover.src ? `url('${esc(cover.src)}')` : `linear-gradient(135deg, ${cover.c1}, ${cover.c2})`;
+  app.innerHTML = `
+    <section class="cover" style="background-image:${coverBg};${cover.focus ? '--focus:' + esc(cover.focus) : ''}">
+      <span class="badge">${esc(h.type)}</span>
+      <h1>${esc(h.name)}</h1>${h.nameHanja?`<p class="meta hanja">${esc(h.nameHanja)}</p>`:''}
+      <p class="meta">${esc(h.era)}<br>${esc(h.place)}</p>
+      <div class="actions">
+        <button class="btn" id="tts">🔊 음성으로 듣기</button>
+        <a class="btn alt" target="_blank" rel="noopener" href="https://map.kakao.com/link/to/${encodeURIComponent(h.name)},${h.lat},${h.lng}">길찾기</a>
+      </div>
+      ${cover.credit ? `<p class="photo-credit">${esc(cover.credit)}</p>` : ''}
+      <p class="scrollhint">아래로 밀어서 이야기 보기 ↓</p>
+    </section>
+    <div class="content">
+    <ul class="summary">${h.summary.map(s => `<li>${esc(s)}</li>`).join('')}</ul>
+    ${h.sections.map((s, i) => `<details ${i===0?'open':''}><summary>${esc(s.title)}</summary><div>${esc(s.body).replace(/\n/g,'<br>')}</div></details>`).join('')}
+    <details><summary>사진 모아보기</summary><div class="gallery">
+      ${h.photos.map((p, i) => `<figure data-i="${i}">${svgPhoto(p, false)}<figcaption>${esc(p.cap)}${p.credit ? '<br>' + esc(p.credit) : ''}</figcaption></figure>`).join('')}
+    </div></details>
+    <p class="notice">${esc(h.credit)}<br>※ 시범 운영 중인 페이지이며 내용은 감수 전 초안입니다. 의견은 관리 기관으로 전달해 주세요.</p>
+    </div>`;
+
+  // 음성 해설 (브라우저 내장 음성합성 사용 — 별도 서버·음원 불필요)
+  const tts = $('#tts'); let speaking = false;
+  tts.onclick = () => {
+    if (!('speechSynthesis' in window)) { alert('이 기기는 음성 읽기를 지원하지 않습니다.'); return; }
+    if (speaking) { speechSynthesis.cancel(); return; }
+    const u = new SpeechSynthesisUtterance(speakText);
+    u.lang = 'ko-KR';
+    u.onstart = () => { speaking = true; tts.textContent = '⏹ 멈추기'; track('tts_start'); };
+    u.onend = u.onerror = () => { speaking = false; tts.textContent = '🔊 음성으로 듣기'; };
+    speechSynthesis.speak(u);
+  };
+
+  // 길찾기·상세 펼침 기록
+  document.querySelector('.cover .btn.alt').addEventListener('click', () => track('map_click'));
+  let trackReady = false; setTimeout(() => { trackReady = true; }, 500);
+  document.querySelectorAll('details').forEach(d => d.addEventListener('toggle', () => {
+    if (trackReady && d.open) track('section_open', { title: d.querySelector('summary').textContent.replace(/^▼\s*/, '').trim() });
+  }));
+  track('view');
+
+  // 사진 확대
+  const lb = $('#lightbox');
+  document.querySelectorAll('.gallery figure').forEach(f => f.onclick = () => {
+    const p = h.photos[+f.dataset.i];
+    track('photo_open', { index: +f.dataset.i }); $('#lbBody').innerHTML = svgPhoto(p, true); $('#lbCap').textContent = p.cap + (p.credit ? ' · ' + p.credit : ''); lb.classList.add('on');
+  });
+  lb.onclick = () => lb.classList.remove('on');
+}
+</script>
+</body>
+</html>
